@@ -1,0 +1,6 @@
+aiohttp==3.7.4
+aiologger["aiofiles"]==0.6.1
+aiohttp-swagger==1.0.15
+health-checker==0.2.0
+webargs==8.0.0
+pydantic==1.8.2
