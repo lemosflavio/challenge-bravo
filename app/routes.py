@@ -5,9 +5,9 @@ from app.endpoints.health_check import HealthCheckView
 
 RouteView = namedtuple("RouteView", ["method", "path", "handler"])
 
-ROUTES = (
-    RouteView(method="GET", path="/health_check", handler=HealthCheckView),
-    RouteView(method="GET", path="/conversion", handler=Conversion),
-)
+ROUTES_MAPPING = {
+    "get_health_check": RouteView(method="GET", path="/health_check", handler=HealthCheckView),
+    "get_conversion": RouteView(method="GET", path="/conversion", handler=Conversion),
+}
 
-ROUTES_MAPPING = {route.handler: route for route in ROUTES}
+ROUTES = tuple(ROUTES_MAPPING.values())
