@@ -1,0 +1,22 @@
+description: Validate all services
+tags:
+- Health check
+produces:
+- application/json
+responses:
+    "200":
+        description: All services are availables
+        schema:
+            type: object
+            properties:
+                heath_check: bool
+            example:
+                heath_check: true
+    "500":
+        description: Some service is unavailable
+        schema:
+            type: object
+            properties:
+                heath_check: bool
+            example:
+                heath_check: false

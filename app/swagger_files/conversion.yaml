@@ -1,0 +1,54 @@
+description: Receive a monetary type, a value and convert to another monetary type.
+tags:
+- Conversion
+produces:
+- application/json
+parameters:
+  - name: "from"
+    in: "query"
+    description: "Monetary type from"
+    required: true
+    type: "string"
+  - name: "to"
+    in: "query"
+    description: "Monetary type to"
+    required: true
+    type: "string"
+  - name: "amount"
+    in: "query"
+    description: "Value to be converted"
+    required: true
+    type: "float"
+responses:
+  "200":
+    description: "Sucesso. Retorna um Json informando os dados passados mais o valor convertido"
+    schema:
+      type: object
+      properties:
+        conversion:
+          type: object
+          properties:
+            from:
+              type: string
+              description: "Monetary type from"
+            to:
+              type: string
+              description: "Monetary type to"
+            amount:
+              type: float
+              description: "Value to be converted"
+            converted_amount:
+              type: float
+              description: "Converted value"
+      example:
+        conversion:
+          {
+            "from": "BRL",
+            "to": "USD",
+            "amount": 5,
+            "converted_amount": 1,
+          }
+  "422":
+    description: "Invalid param received"
+  "500":
+    description: "Internal server error"
