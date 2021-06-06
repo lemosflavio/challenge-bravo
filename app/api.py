@@ -10,6 +10,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from app.config import settings
 from app.middlewares import middleware
 from app.routes import ROUTES, RouteView
+from app.services.mongo import ExchangeRateService
 
 
 class Api:
@@ -40,6 +41,7 @@ class Api:
             flatten=True,
         )
         app["logger"].add_handler(handler)
+        app["exchange_rate_service"] = ExchangeRateService(app["mongo_db"][settings.MONGO_EXCHANGE_TAX_COLLECTION])
 
     def register_routes(self):
         for view in self._views:
