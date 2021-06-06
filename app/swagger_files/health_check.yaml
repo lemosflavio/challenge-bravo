@@ -9,14 +9,14 @@ responses:
         schema:
             type: object
             properties:
-                heath_check: bool
+                validate_mongo_connection: bool
             example:
-                heath_check: true
+                validate_mongo_connection: true
     "500":
         description: Some service is unavailable
         schema:
             type: object
             properties:
-                heath_check: bool
+                validate_mongo_connection: bool
             example:
-                heath_check: false
+                validate_mongo_connection: false

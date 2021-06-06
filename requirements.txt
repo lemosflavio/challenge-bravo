@@ -4,3 +4,4 @@ aiohttp-swagger==1.0.15
 health-checker==0.2.0
 webargs==8.0.0
 pydantic==1.8.2
+motor==2.4.0

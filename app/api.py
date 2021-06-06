@@ -5,6 +5,7 @@ from aiohttp import web
 from aiohttp_swagger import setup_swagger
 from aiologger.handlers.files import AsyncFileHandler
 from aiologger.loggers.json import JsonLogger
+from motor.motor_asyncio import AsyncIOMotorClient
 
 from app.config import settings
 from app.middlewares import middleware
@@ -21,16 +22,24 @@ class Api:
         self._views = routes or []
         self.register_routes()
         self.register_signals()
+        self.app.on_startup.append(self.init_engines)
         self.app.on_startup.append(self.init_services)
         self.app.on_shutdown.append(self.shutdown)
 
+    async def init_engines(self, app):
+        await self.init_mongo(app)
+
+    async def init_mongo(self, app):
+        app["mongo"] = AsyncIOMotorClient(host=settings.mongo_uri)
+        app["mongo_db"] = app["mongo"][settings.MONGO_DB]
+
     async def init_services(self, app):
         handler = AsyncFileHandler(filename=settings.LOG_FILENAME)
-        self.app["logger"] = JsonLogger.with_default_handlers(
+        app["logger"] = JsonLogger.with_default_handlers(
             level=settings.LOG_LEVEL,
             flatten=True,
         )
-        self.app["logger"].add_handler(handler)
+        app["logger"].add_handler(handler)
 
     def register_routes(self):
         for view in self._views:
@@ -39,7 +48,8 @@ class Api:
             )
 
     async def shutdown(self, app):
-        await self.app["logger"].shutdown()
+        await app["logger"].shutdown()
+        app["mongo"].close()
 
     def register_signals(self):
         self.app.on_shutdown.append(self.shutdown)
