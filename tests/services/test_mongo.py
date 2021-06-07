@@ -38,6 +38,28 @@ class ExchangeRateServiceTest(TestCase):
         })
 
     @unittest_run_loop
+    async def test_find(self):
+        exchange_from = 'BRL'
+        exchange_to = 'USD'
+        exchange_tax = 5
+        to_list = CoroutineMock(return_value=[{
+            'exchange_from': exchange_from,
+            'exchange_to': exchange_to,
+            'exchange_tax': exchange_tax,
+        }])
+
+        self.collection.find.return_value = MagicMock(to_list=to_list)
+
+        result = await self.service.find()
+
+        self.assertNotEqual(result.exchange_rates, [])
+        self.assertEqual(exchange_from, result.exchange_rates[0].exchange_from)
+        self.assertEqual(exchange_to, result.exchange_rates[0].exchange_to)
+        self.assertEqual(exchange_tax, result.exchange_rates[0].exchange_tax)
+        self.collection.find.assert_called_once_with({})
+        to_list.assert_awaited_once(None)
+
+    @unittest_run_loop
     async def test_find_one_returns_none(self):
         exchange_from = 'BRL'
         exchange_to = 'USD'

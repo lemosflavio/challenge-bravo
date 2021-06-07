@@ -2,7 +2,7 @@ from typing import Optional
 
 from motor.core import AgnosticCollection
 
-from app.models.exchange_rate import ExchangeRateModel
+from app.models.exchange_rate import ExchangeRateModel, ExchangeRatesModel
 
 
 class ExchangeRateService:
@@ -15,6 +15,10 @@ class ExchangeRateService:
             'exchange_to': exchange_to
         })
         return ExchangeRateModel(**data) if data else None
+
+    async def find(self) -> ExchangeRatesModel:
+        data = await self.__collection.find({}).to_list(None)
+        return ExchangeRatesModel(exchange_rates=data)
 
     async def insert(self, exchange_rate: ExchangeRateModel):
         await self.__collection.insert_one(exchange_rate.dict())
