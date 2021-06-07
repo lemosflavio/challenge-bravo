@@ -7,7 +7,6 @@ from pydantic import BaseSettings
 class Settings(BaseSettings):
     VERIFY_SSL: bool = True
     LOG_LEVEL: int = logging.DEBUG
-    LOG_FILENAME: str = "/opt/logs/api.log"
     PORT: int = 8080
     HOST: str = "127.0.0.1"
 

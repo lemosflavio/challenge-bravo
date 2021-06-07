@@ -3,7 +3,7 @@ from typing import Iterable
 
 from aiohttp import web
 from aiohttp_swagger import setup_swagger
-from aiologger.handlers.files import AsyncFileHandler
+from aiologger.handlers.streams import AsyncStreamHandler
 from aiologger.loggers.json import JsonLogger
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -35,12 +35,11 @@ class Api:
         app["mongo_db"] = app["mongo"][settings.MONGO_DB]
 
     async def init_services(self, app):
-        handler = AsyncFileHandler(filename=settings.LOG_FILENAME)
         app["logger"] = JsonLogger.with_default_handlers(
             level=settings.LOG_LEVEL,
             flatten=True,
         )
-        app["logger"].add_handler(handler)
+        app["logger"].add_handler(AsyncStreamHandler(level=settings.LOG_LEVEL))
         app["exchange_rate_service"] = ExchangeRateService(app["mongo_db"][settings.MONGO_EXCHANGE_TAX_COLLECTION])
 
     def register_routes(self):
