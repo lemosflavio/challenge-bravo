@@ -31,7 +31,7 @@ async def middleware(request: web.Request, handler):
                 data={"message": "500: Internal Server Error"},
             )
 
-        if e.status in (HTTPStatus.NOT_FOUND, HTTPStatus.UNAUTHORIZED, HTTPStatus.UNPROCESSABLE_ENTITY):
+        if e.status in (HTTPStatus.CONFLICT, HTTPStatus.NOT_FOUND, HTTPStatus.UNAUTHORIZED, HTTPStatus.UNPROCESSABLE_ENTITY):
             logger.warning({
                 "method": request.method,
                 "endpoint": request.path,
